@@ -4,25 +4,23 @@ using namespace std;
 void leggi_ric(int *X, int dim){
     //PRE=X array di 50 elementi vuoto, dim>0
     if(dim>0){
-        cin>>X[dim-1]; //Gli elementi sono salvati in ordine inverso rispetto all'inserimento
-        leggi_ric(X, dim-1); //ricorsione
+        cin>>X[0]; //Gli elementi sono salvati in ordine inverso rispetto all'inserimento
+        leggi_ric(X+1, dim-1); //ricorsione
     }
 }
 
 int match_ric(int *Text, int TextLength, int *Pattern, int PatternLength){
     //PRE=0<=TextLenth<50, 0<=PatternLength<10
-    int result = -1;
-    if(TextLength==0)
-        return result;
+    if(Text[TextLength-1]==Pattern[PatternLength-1]){
+        return match_ric(Text, TextLength-1, Pattern, PatternLength-1);
+    }
     else if (PatternLength==0)
-        result = TextLength;
-    else if(Text[TextLength-1]==Pattern[PatternLength-1]){
-        result = match_ric(Text, TextLength-1, Pattern, PatternLength-1);
+        return TextLength; 
+    else if(TextLength==0)
+        return -1;
+    else {
+        return match_ric(Text,TextLength-1, Pattern, PatternLength);
     }
-    else{
-        result = match_ric(Text,TextLength-1, Pattern, PatternLength);
-    }
-    return TextLength - result;
 }
 
 main()
