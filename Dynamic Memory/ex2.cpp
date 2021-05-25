@@ -28,39 +28,43 @@ nodo* build1(int m)
    return new nodo(s,build1(m-1));
 }
 
+//PRE=(Lista(L) ben formata, vLista(L)=Lista(L))
 nodo* del1(nodo* L, int z){
-    //PRE=(Lista(L) ben formata, vLista(L)=Lista(L))
-    int k=length(L), h = 0;
-    nodo *X[k];
-    for(int i=0;i<k;i++){
-        if(L->info!=z){
-            X[h] = L;
-            h++;
-        }
-        L=L->next;
+    if(!L)
+        return 0;
+    int val = L->info;
+    if(length(L)==0)
+        return 0;
+    else if(length(L)>0 && val != z)
+        return new nodo(val, del1(L->next,z));
+    else return new nodo(L->next->info, del1(L->next->next, z));
+}
+//POST=(restituisce una lista composta dai nodi di vLista(L)che non hanno campo info=z nell’ordine che hanno in vLista(L)) && (dealloca gli altri nodidi vLista(L))
+
+//PRE=(LIsta(L) ben formata, non vuota,e L->info != z, sia vLista(L)=Lista(L))
+void del2(nodo*L, int z){
+    if(!L)
+        return;
+    else if(length(L)>0 && L->info != z)
+        del2(L->next, z);
+    else if(L->info==z){
+        L->info = L->next->info;
+        L->next = L->next->next;
+        del2(L,z);
     }
-    delete L;;
-    L = new nodo();
-    for(int j=0; j<h;j++){
-        L = X[j];
-        L = L->next;
+    else{ 
+        delete L;
     }
-    
-    return L;
-    //POST=(restituisce una lista composta dai nodi di vLista(L)che non hanno campo info=z nell’ordine che hanno in vLista(L)) && (dealloca gli altri nodidi vLista(L))
+
 }
+//POST=(Lista(L) è ottenuta da vLista(L) eliminando i nodi con info=z e tenendo gli altri mantenendo il loro ordine) &&(i nodi con info=z sono deallocati)
 
-nodo* del2(nodo* A, int z){
-    //PRE=(LIsta(L) ben formata, non vuota,e L->info != z, siavLista(L)=Lista(L))
+//PRE=(Lista(L) ben formata, vLista(L)=Lista(L))
+void del3(nodo*&L, int z){
+   
 
-    //POST=(Lista(L) è ottenuta da vLista(L) eliminando i nodi con info=z e tenendo gli altri mantenendo il loro ordine) &&(i nodi con info=z sono deallocati)
 }
-
-nodo* del3(nodo* A, int z){
-    //PRE=(Lista(L) ben formata, vLista(L)=Lista(L))
-
-    //POST=(Lista(L) è ottenuto da vLista(L) eliminando i nodi con info=z e mantenendo gli altri nello stessoordine che avevano in vLista(L) && (i nodi eliminati sono deallocati)
-}
+//POST=(Lista(L) è ottenuto da vLista(L) eliminando i nodi con info=z e mantenendo gli altri nello stessoordine che avevano in vLista(L) && (i nodi eliminati sono deallocati)
 
 main()
 {
