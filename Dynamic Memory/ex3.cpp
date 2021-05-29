@@ -21,13 +21,34 @@ nodo* build1(int m)
    cin >>s;
    return new nodo(s,build1(m-1));
 }
- 
-
-struct doppiaL{nodo*L,*S; doppiaL(nodo*a=0,nodo*b=0){L=a; S=b;}};
 
 //PRE= (T e P sono liste ben definite)
-doppiaL match1(nodo*T, nodo*P){
-
+doppiaL match1(nodo*T, nodo*P){  
+  doppiaL lista_vuota = doppiaL(T, 0);
+  if(T && P){
+    if(T->info==P->info){
+      doppiaL q = match1(T->next,P->next);
+      if(!q.L)
+        q.L = T->next;
+      if(!q.S)
+        T->next=0;
+      else
+        T->next = q.S;
+      q.S = T;
+      return q;
+    }
+    else{
+      doppiaL q = match1(T->next,P);
+      //SISTEMARE, MANCA PARTE INIZIALE IN q.L
+      /*
+15 5
+1 0 1 0 2 0 3 4 0 1 2 0 4 1 0
+3 4 0 1 2
+      */
+      return q;
+    }
+  }
+  return doppiaL();
 }
 //POST=(se in T c’è un match P’ di P, la funzione restituisce un valore doppiaL q, 
 // con q.S=P’ e q.L=quello che resta di T una volta tolto P’,
@@ -36,7 +57,19 @@ doppiaL match1(nodo*T, nodo*P){
 
 //PRE=(T e P sono ben formate)
 nodo* match3(nodo*&T, nodo*P){
-
+  if(T && P){
+    if(T->info==P->info){
+      nodo* q = T;
+      q->next = match3(T->next,P->next);
+      if(!T->next)
+        T=0;
+      return q;
+    }
+    else{
+      return match3(T->next,P);
+    }
+  }
+  return 0;
 }
 //POST=(se c’è match restituisce il primo match P’ col return e quello che resta 
 //di T nel parametro T) &&(se non c’è match T resta invariata e ritorna 0 col return)
