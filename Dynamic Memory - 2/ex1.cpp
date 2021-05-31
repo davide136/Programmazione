@@ -24,7 +24,6 @@ nodo* build1(int m)
 
 //PRE= (T e P sono liste ben definite)
 doppiaL match1(nodo*T, nodo*P){  
-  doppiaL lista_vuota = doppiaL(T, 0);
   if(T && P){
     if(T->info==P->info){
       doppiaL q = match1(T->next,P->next);
@@ -39,12 +38,8 @@ doppiaL match1(nodo*T, nodo*P){
     }
     else{
       doppiaL q = match1(T->next,P);
-      //SISTEMARE, MANCA PARTE INIZIALE IN q.L
-      /*
-15 5
-1 0 1 0 2 0 3 4 0 1 2 0 4 1 0
-3 4 0 1 2
-      */
+      q.L = new nodo(T->info,q.L);     
+      T->next=q.L;
       return q;
     }
   }
@@ -59,10 +54,10 @@ doppiaL match1(nodo*T, nodo*P){
 nodo* match3(nodo*&T, nodo*P){
   if(T && P){
     if(T->info==P->info){
-      nodo* q = T;
+      nodo* q = new nodo(); 
       q->next = match3(T->next,P->next);
-      if(!T->next)
-        T=0;
+      q->info = T->info;
+      T=T->next;
       return q;
     }
     else{
@@ -97,3 +92,9 @@ main()
   stampa_LR_iter(L1);
   stampa_LR_iter(q);
 }
+
+      /*
+15 5
+1 0 1 0 2 0 3 4 0 1 2 0 4 1 0
+3 4 0 1 2
+      */
