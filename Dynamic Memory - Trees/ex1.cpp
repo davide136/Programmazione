@@ -38,32 +38,48 @@ int length(nodo*L)
 
 /*PRE=(Lista(L) ben formata e ordinata, x punta ad un nodo) */
 nodo* insOrd_ric(nodo*L, nodo*x) {
-  if(L->next){//sbagliato approccio
-    if( x->info > L->info  &&  x->info < L->next->info ){
-      x->next = L->next;
-      L->next= x;
-      return L;
+  nodo* R = new nodo();
+  if(!L)
+    return x;
+  if(L->next){
+    if(L->info<x->info){
+      L = new nodo(L->info, insOrd_ric(L->next,x));
+    }
+    else{
+      x->next = L;
+      return x;
     }
   }
-  else return 0;
-  L->next=insOrd_ric(L->next,x);
+  else{ L->next=x; return L;}
   return L;
 }
 nodo* insOrd_iter(nodo* L, nodo*x) {
   int dimL = length(L);
-  nodo* vL=L;
-  for(int i=0;i<dimL-1;i++){
-    if(L->info < x->info && L->next->info > x->info){
-      x->next = L->next;
-      L->next = x;
-      i=dimL; 
+  bool first = true;
+  nodo* R[dimL+1];
+  for(int i=0;i<dimL+1;i++){
+    R[i]=L;
+    if(L && L->info > x->info && first){
+      R[i+1]=L;
+      R[i]=x;
+      i++; 
+      first = false;
+      L=L->next;
     }
-    L=L->next;
+    else
+      if(L) L=L->next;
+      else R[i]=x;
   }
-  return vL;
+  for(int i=0;i<dimL;i++){
+    R[i]->next=R[i+1];
+  }
+  return R[0];
 }
 /*POST=(restituisce vL(L) con x aggiunto in modo che la nuova lista sia ancora ordinata)*/
-
+/*
+5 15
+2  10  12  20  30
+*/
 main()
 {
   int m, x;
