@@ -1,4 +1,5 @@
 #include<iostream>
+#include<sstream>
 using namespace std;
 
 struct nodo{
@@ -28,8 +29,6 @@ nodo* buildTree(int arr[], int i, int n)  {
     return root;
 
 }
-
-
 void stampa_l(nodo *r)
 {
   if(r)
@@ -50,10 +49,37 @@ void sc(int*C)
     sc(C+1);
 }
 
+
+string tree_to_string_PRE(nodo* root){
+  string result = "";
+  if(root){
+    result = result + to_string(root->info) + " ";
+    result += tree_to_string_PRE(root->left);
+    result += tree_to_string_PRE(root->right);
+  }
+  return result;
+}
+
+string tree_to_string_INF(nodo* root){
+  string result = "";
+  if(root){
+    result += tree_to_string_PRE(root->left);
+    result = result + to_string(root->info) + " ";
+    result += tree_to_string_PRE(root->right);
+  }
+  return result;
+}
+
 /*PRE=(albero(r) ben formato,0<= n<=k, k>0)*/
-int stampaASPre(nodo*r, int n, int k){
-
-
+int stampaASPre(nodo*r, int n){
+  string r_prefisso = tree_to_string_PRE(r);
+  for(int i=2;i<r_prefisso.length();i=i+2){
+    if(i%(2*n) == 0){
+      cout << r_prefisso[i-2]<<' ';
+    }
+  }
+  int resto = r_prefisso.length()%(2*n)-1;
+  return resto;
 }
 /*POST=(considerando I nodi di albero(r) in ordine prefisso, salta n nodi e poi 
 stampa quello successivo e dopo ne salta k-1 e poi stampa il successivo, restituisce
@@ -61,8 +87,16 @@ stampa quello successivo e dopo ne salta k-1 e poi stampa il successivo, restitu
  dopo l’ultimo stampato)*/
 
  /*PRE=(albero(r) ben formato,0<= n<=k, k>0)*/
-int stampaASInf(nodo*r, int n, int k){
+int stampaASInf(nodo*r, int n){
 
+  string infisso = tree_to_string_INF(r);
+  for(int i=2;i<infisso.length();i=i+2){
+    if(i%(2*n) == 0){
+      cout << infisso[i-2]<<' ';
+    }
+  }
+  int resto = infisso.length()%(2*n)-1;
+  return resto;
     
 }
 /*POST=(considerando I nodi di albero(r) in ordine infisso, salta n nodi e poi 
@@ -79,14 +113,14 @@ int main() {
       
     nodo* root = NULL;
     root = buildTree(a, 0, dim);
-    stampa_l(root);
+    //stampa_l(root);
    
     int k;  
     cin>>k;    
     
-   int a1 = stampaASPre(root, k, k);
-   cout << " con avanzo "<< a1<<endl;
-   int b1=  stampaASInf(root, k, k);
-   cout << " con avanzo "<< b1 <<endl;
+   int a1 = stampaASPre(root, k);
+   cout << "con avanzo "<< a1<<endl;
+   int b1=  stampaASInf(root, k);
+   cout << "con avanzo "<< b1 <<endl;
    
 }
