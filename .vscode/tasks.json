@@ -6,12 +6,31 @@
             "command": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe",
             "args": [
                 "-g",
-                "${file}",
+                "${fileDirname}\\*.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\main.exe"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "Attività generata dal debugger."
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: cpp.exe compila il file attivo",
+            "command": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\cpp.exe",
+            "args": [
+                "-g",
+                "${workspaceFolder}\\*.cpp",
+                "-o",
+                "${fileDirname}\\main.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
             },
             "problemMatcher": [
                 "$gcc"
@@ -20,7 +39,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Attività generata dal debugger."
+            "detail": "compilatore: \"C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\cpp.exe\""
         }
     ],
     "version": "2.0.0"
