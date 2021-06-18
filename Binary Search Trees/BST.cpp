@@ -48,12 +48,10 @@ bool BST::search (nodo* r, int val){
 //PRE=vr=r ben formato BST
 nodo* BST::max(nodo* r){
     if(r){
-        if(r->right){
-            if(r->right->info>r->info)
-                return max(r->right);
-            else
-                return r;
-        }
+        if(r->right)
+            return max(r->right);        
+        else 
+            return r;
     }
     return r;
 }
@@ -62,12 +60,10 @@ nodo* BST::max(nodo* r){
 //PRE=vr=r ben formato BST
 nodo* BST::min(nodo* r){
     if(r){
-        if(r->left){
-            if(r->left->info<r->info)
-                return min(r->left);
-            else
-                return r;
-        }
+        if(r->left)            
+            return min(r->left);
+        else
+            return r;        
     }
     return r;
 }

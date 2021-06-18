@@ -29,7 +29,6 @@ nodo* buildTree(int arr[], int i, int n)  {
 
 }
 
-
 void stampa_l(nodo *r)
 {
   if(r)
@@ -44,7 +43,6 @@ void stampa_l(nodo *r)
     cout<< '_';
 }
 
-
 void buildBST(nodo*&r,int x)
 {
   //cout << "inserisco "<<x<<endl;
@@ -58,45 +56,54 @@ void buildBST(nodo*&r,int x)
 //PRE=(r è albero ben formato && m1<=y<=m2 )
 void calcIntMin(nodo* r, int *m1, int* m2, int y){
     if(r){
-        if(r->info==y){*m1=*m2=y;return;}
-        else{
-            bool inside_interval = r->info>=*m1 && r->info <= *m2 ;
-            if(inside_interval && r->info <= *m2)
-                *m1=r->info;
-            if(inside_interval && r->info >= *m1)
-                *m2=r->info;
-            calcIntMin(r->left, m1, m2, y);
-            calcIntMin(r->right, m1, m2, y);
-        }
-        
+        if(r->info >= *m1 && r->info <= y )
+          *m1 = r->info;
+        if(r->info <= *m2 && r->info >= y )
+          *m2 = r->info;
+        calcIntMin(r->left, m1, m2, y);
+        calcIntMin(r->right, m1, m2, y);
     }
     return;
 }
-//POST=(vengono restituiti per riferimento i valori più vicini ad y)
+/*POST=(vengono restituiti in m1 e m2 i valori di x1 e x2 t.c.
+ x1<=y<=x2 e sono il minore intervallo possibile tra gli info dell'albero) */
 
-//PRE=(r è alberomben formato BST && m1<=y<=m2 )
+//CORRETTEZZA_calcintmin=(scrorro albero, se trovo info maggiore 
+//di m1 e minore di y, salvo tale valore in m1.
+//se trovo info minore di m2 e maggiore di y salvo in m2.
+//quando ho finito il giro ritorno.)
+
+//PRE=(r è albero ben formato BST && m1<=y<=m2 )
 void calcIntMinBST(nodo* r, int *m1, int* m2, int y){
-    if(r){
-        bool left = true, right = true;
-        while(left || right){
-            if(r->info==y){*m1=*m2=y;left=right=false;}
-            else{
-                if(r->right){
-                    if(r->info<=*m1)
-                        r=r->right;
-                }
-                else right = false;
-                if(r->left){
-                    if(r->info>=*m2)
-                        r=r->left;
-                }
-                else left = false;
-            }
+    
+    if(!r) *m1=*m2=0;
+    else{
+      bool ok = true;
+      while(ok){
+        if(!r) 
+          ok = false;
+        else{
+          if(r->info==y){*m1=*m2=y; ok=false;}
+          else if(y <= r->info && *m2 >= r->info){
+            *m2 = r->info;
+            r = r->left;
+          }
+          else if(y >= r->info && *m1 <= r->info){
+            *m1 = r->info;
+            r = r->right;
+          }
         }
-        *m1=r->info;
-        *m2=r->right->info;
+        
+      }
     }
 }
+/*POST=(viene restituito tramite m1 e m2 la coppia di valori x1 e x2 t.c. 
+x1 <= y <= x2 e sono il minore intervallo possibile tra gli info dell'albero)*/
+
+/* CORRETTEZZA_calcintminBST=(scorro l'albero in base al valore di y:
+Se y < info, devo spostarmi a sinistra, pongo m2 uguale all'info attuale
+Se y > info devo spostarmi a destra e pongo m1 uguale all'info attuale)
+*/
 
 
 int main()
@@ -123,17 +130,17 @@ int main()
     int l1,l2,y;
     while(!basta)
       {
-	cin>> l1>>l2>>y;
-	int z1=l1, z2=l2;
-	if(y==-1)
-	  basta=true;
-	else
-	  {
-	    calcIntMin(r,&l1,&l2,y);
-	    cout <<"l1="<<l1<<" l2="<<l2<<endl;
-	    
-	    calcIntMinBST(r1,&z1,&z2,y);
-	    cout <<"l1="<<z1<<" l2="<<z2<<endl;
-	  }
+        cin>> l1>>l2>>y;
+        int z1=l1, z2=l2;
+        if(y==-1)
+          basta=true;
+        else
+          {
+            calcIntMin(r,&l1,&l2,y);
+            cout <<"l1="<<l1<<" l2="<<l2<<endl;
+            
+            calcIntMinBST(r1,&z1,&z2,y);
+            cout <<"l1="<<z1<<" l2="<<z2<<endl;
+          }
       }
 }
