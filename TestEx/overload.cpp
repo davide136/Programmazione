@@ -11,6 +11,11 @@ struct forma{
     forma(int a, int b, colore c){vertici=a;archi=b;col=c;}
 };
 
+int * f (int **a){
+    int b=10, *p=&b; *p=**a; *a=p; 
+    return *a;
+}
+
 //tipo ritorno - nome funzione ( tipi necessari a funzione ) { implementazione } 
     ostream&      operator<<       (ostream& o,const forma& x)    {
         string nome = "non regolare";
@@ -69,4 +74,5 @@ int main(){
     }
     forma f = forma(a,b,d);
     cout << f;
+    
 }
